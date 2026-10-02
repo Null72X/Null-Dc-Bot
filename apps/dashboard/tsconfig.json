@@ -13,6 +13,21 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@null-bot/config": [
+        "../../packages/config/src/index.ts"
+      ],
+      "@null-bot/database": [
+        "../../packages/database/src/index.ts"
+      ],
+      "@null-bot/logger": [
+        "../../packages/logger/src/index.ts"
+      ],
+      "@null-bot/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@null-bot/types": [
+        "../../packages/types/src/index.ts"
       ]
     },
     "noEmit": true,
@@ -25,7 +40,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/**/*.ts"
   ],
   "exclude": [
     "node_modules"
