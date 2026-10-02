@@ -1,0 +1,30 @@
+{
+  "name": "@null-bot/bot",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "deploy-commands": "node dist/deploy-commands.js"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^2.3.0",
+    "@discordjs/voice": "^0.17.0",
+    "@null-bot/config": "*",
+    "@null-bot/database": "*",
+    "@null-bot/logger": "*",
+    "@null-bot/shared": "*",
+    "@null-bot/types": "*",
+    "discord-api-types": "^0.37.83"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.15.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "discord.js": "^14.15.3",
+    "typescript": "^5.4.5"
+  }
+}

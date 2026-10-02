@@ -1,0 +1,44 @@
+services:
+  # 1. Discord Bot Service (Persistent Background Process)
+  - type: worker
+    name: null-discord-bot
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:bot
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: DATABASE_NAME
+        value: nullbot
+
+  # 2. Web Dashboard Service (Next.js Application)
+  - type: web
+    name: null-web-dashboard
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:dashboard
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: DISCORD_REDIRECT_URI
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: DATABASE_NAME
+        value: nullbot
+      - key: DASHBOARD_URL
+        sync: false
+      - key: SESSION_SECRET
+        sync: false

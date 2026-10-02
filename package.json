@@ -1,0 +1,33 @@
+{
+  "name": "null-bot-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NULL - Production-Ready All-in-One Discord Bot & Web Dashboard",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:packages": "npm run build --workspace=@null-bot/types && npm run build --workspace=@null-bot/config && npm run build --workspace=@null-bot/logger && npm run build --workspace=@null-bot/shared && npm run build --workspace=@null-bot/database",
+    "build:bot": "npm run build --workspace=@null-bot/bot",
+    "build:dashboard": "npm run build --workspace=@null-bot/dashboard",
+    "build": "npm run build:packages && npm run build:bot && npm run build:dashboard",
+    "start": "npm run start --workspace=@null-bot/bot",
+    "start:bot": "npm run start --workspace=@null-bot/bot",
+    "start:dashboard": "npm run start --workspace=@null-bot/dashboard",
+    "dev": "concurrently \"npm run dev --workspace=@null-bot/bot\" \"npm run dev --workspace=@null-bot/dashboard\"",
+    "dev:bot": "npm run dev --workspace=@null-bot/bot",
+    "dev:dashboard": "npm run dev --workspace=@null-bot/dashboard",
+    "deploy-commands": "npm run deploy-commands --workspace=@null-bot/bot",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
