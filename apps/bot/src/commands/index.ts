@@ -19,7 +19,19 @@ import { giveawayCommand } from './giveaways/giveaway.js';
 import { reactionRoleCommand } from './reactionroles/reactionrole.js';
 import { welcomeCommand } from './welcome/welcome.js';
 import { autoResponderCommand } from './autoresponder/autoresponder.js';
-import { serverinfoCommand, userinfoCommand, avatarCommand, pingCommand, botinfoCommand, privacyCommand } from './utility/info.js';
+import {
+  serverinfoCommand,
+  userinfoCommand,
+  avatarCommand,
+  roleinfoCommand,
+  channelinfoCommand,
+  pingCommand,
+  botinfoCommand,
+  calculatorCommand,
+  timestampCommand,
+  membercountCommand,
+  privacyCommand,
+} from './utility/info.js';
 import { serverMgmtCommand } from './servermgmt/servermgmt.js';
 import { tempVoiceCommand } from './tempvoice/tempvoice.js';
 import { pollCommand } from './polls/poll.js';
@@ -59,8 +71,13 @@ export const allCommands: Command[] = [
   serverinfoCommand,
   userinfoCommand,
   avatarCommand,
+  roleinfoCommand,
+  channelinfoCommand,
   pingCommand,
   botinfoCommand,
+  calculatorCommand,
+  timestampCommand,
+  membercountCommand,
   privacyCommand,
   serverMgmtCommand,
   tempVoiceCommand,

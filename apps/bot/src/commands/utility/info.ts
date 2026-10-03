@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { Command } from '../../types.js';
-import { createEmbed } from '@null-bot/shared';
+import { createEmbed, createErrorEmbed } from '@null-bot/shared';
 import { botIdentity } from '@null-bot/config';
 import os from 'os';
 
@@ -83,6 +83,56 @@ export const avatarCommand: Command = {
   },
 };
 
+export const roleinfoCommand: Command = {
+  name: 'roleinfo',
+  description: 'View detailed role information',
+  category: 'Utility',
+  data: new SlashCommandBuilder()
+    .setName('roleinfo')
+    .setDescription('View role information')
+    .addRoleOption((opt) => opt.setName('role').setDescription('Role to inspect').setRequired(true)),
+
+  async execute(interaction: ChatInputCommandInteraction) {
+    const role = interaction.options.getRole('role', true);
+    const embed = createEmbed({
+      title: `🎭 Role Information — ${role.name}`,
+      color: role.color || '#5865F2',
+      fields: [
+        { name: 'Role ID', value: role.id, inline: true },
+        { name: 'Position', value: `${role.position}`, inline: true },
+        { name: 'Hoisted', value: role.hoist ? 'Yes' : 'No', inline: true },
+        { name: 'Mentionable', value: role.mentionable ? 'Yes' : 'No', inline: true },
+        { name: 'Color Hex', value: (role as any).hexColor || '#5865F2', inline: true },
+        { name: 'Created At', value: (role as any).createdTimestamp ? `<t:${Math.floor((role as any).createdTimestamp / 1000)}:D>` : 'N/A', inline: true },
+      ],
+    });
+    await interaction.reply({ embeds: [embed] });
+  },
+};
+
+export const channelinfoCommand: Command = {
+  name: 'channelinfo',
+  description: 'View detailed channel information',
+  category: 'Utility',
+  data: new SlashCommandBuilder()
+    .setName('channelinfo')
+    .setDescription('View channel information')
+    .addChannelOption((opt) => opt.setName('channel').setDescription('Channel to inspect').setRequired(false)),
+
+  async execute(interaction: ChatInputCommandInteraction) {
+    const channel: any = interaction.options.getChannel('channel') || interaction.channel;
+    const embed = createEmbed({
+      title: `📁 Channel Information — #${channel?.name || 'Channel'}`,
+      fields: [
+        { name: 'Channel ID', value: channel?.id || 'N/A', inline: true },
+        { name: 'Type', value: `${channel?.type}`, inline: true },
+        { name: 'Created At', value: channel?.createdTimestamp ? `<t:${Math.floor(channel.createdTimestamp / 1000)}:D>` : 'N/A', inline: true },
+      ],
+    });
+    await interaction.reply({ embeds: [embed] });
+  },
+};
+
 export const pingCommand: Command = {
   name: 'ping',
   description: 'View bot latency and Gateway WebSocket ping',
@@ -128,6 +178,82 @@ export const botinfoCommand: Command = {
       ],
     });
 
+    await interaction.reply({ embeds: [embed] });
+  },
+};
+
+export const calculatorCommand: Command = {
+  name: 'calculator',
+  description: 'Calculate mathematical expressions safely',
+  category: 'Utility',
+  data: new SlashCommandBuilder()
+    .setName('calculator')
+    .setDescription('Calculate math expression')
+    .addStringOption((opt) => opt.setName('expression').setDescription('Math expression (e.g. 5 * 12 + 100)').setRequired(true)),
+
+  async execute(interaction: ChatInputCommandInteraction) {
+    const expr = interaction.options.getString('expression', true);
+    try {
+      // Safe math evaluation regex
+      if (!/^[0-9+\-*/().\s]+$/.test(expr)) {
+        await interaction.reply({ embeds: [createErrorEmbed('Invalid characters in math expression.')], ephemeral: true });
+        return;
+      }
+      const result = Function(`"use strict"; return (${expr})`)();
+      await interaction.reply({
+        embeds: [
+          createEmbed({
+            title: '🧮 Calculator',
+            fields: [
+              { name: 'Expression', value: `\`${expr}\`` },
+              { name: 'Result', value: `\`${result}\`` },
+            ],
+          }),
+        ],
+      });
+    } catch (e) {
+      await interaction.reply({ embeds: [createErrorEmbed('Failed to compute expression.')], ephemeral: true });
+    }
+  },
+};
+
+export const timestampCommand: Command = {
+  name: 'timestamp',
+  description: 'Generate Discord formatted dynamic timestamp',
+  category: 'Utility',
+  data: new SlashCommandBuilder()
+    .setName('timestamp')
+    .setDescription('Generate Discord timestamp')
+    .addIntegerOption((opt) => opt.setName('minutes_from_now').setDescription('Minutes from current time').setRequired(true)),
+
+  async execute(interaction: ChatInputCommandInteraction) {
+    const mins = interaction.options.getInteger('minutes_from_now', true);
+    const time = Math.floor((Date.now() + mins * 60 * 1000) / 1000);
+
+    const embed = createEmbed({
+      title: '⏰ Discord Timestamp Generator',
+      fields: [
+        { name: 'Relative Format (<t:TIME:R>)', value: `\`<t:${time}:R>\` → <t:${time}:R>` },
+        { name: 'Full Format (<t:TIME:F>)', value: `\`<t:${time}:F>\` → <t:${time}:F>` },
+      ],
+    });
+    await interaction.reply({ embeds: [embed] });
+  },
+};
+
+export const membercountCommand: Command = {
+  name: 'membercount',
+  description: 'View server member count statistics',
+  category: 'Utility',
+  data: new SlashCommandBuilder().setName('membercount').setDescription('View server member count'),
+
+  async execute(interaction: ChatInputCommandInteraction) {
+    const guild = interaction.guild!;
+    const embed = createEmbed({
+      title: `👥 Member Count — ${guild.name}`,
+      description: `**Total Members:** \`${guild.memberCount}\``,
+      color: '#5865F2',
+    });
     await interaction.reply({ embeds: [embed] });
   },
 };
